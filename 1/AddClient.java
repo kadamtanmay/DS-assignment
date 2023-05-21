@@ -1,35 +1,20 @@
-import java.rmi.*;
-import java.util.Scanner;
+import java.rmi.Naming;
 
+public class AddClient {
+    public static void main(String args[]) {
+        if (args.length < 3) {
+            System.out.println("Usage: java AddClient <server_address> <num1> <num2>");
+            return;
+        }
 
-
-public class Client{
-	public static void main(String[] args){
-		Scanner sc = new Scanner(System.in);
-		
-		try{
-			String serverURL = "rmi://localhost/Server";
-			ServerIntf serverIntf = (ServerIntf) Naming.lookup(serverURL);
-			
-			System.out.print("Enter First Number: ");
-			double num1 = sc.nextDouble();
-			
-			System.out.print("Enter Second Number: ");
-			double num2 = sc.nextDouble();
-			
-			
-			
-			
-			
-			System.out.println("--------------- Results ---------------");
-			System.out.println("Addition Is: " +serverIntf.Addition(num1, num2));
-		
-			
-			
-		}catch(Exception e){
-			System.out.println("Exception Occurred At Client!" + e.getMessage());
-		}
-		
-	}
-
+        try {
+            String addServerURL = "rmi://" + args[0] + "/AddServer";
+            AddServerIntf addServerIntf = (AddServerIntf) Naming.lookup(addServerURL);
+            double d1 = Double.parseDouble(args[1]);
+            double d2 = Double.parseDouble(args[2]);
+            System.out.println("The sum is: " + addServerIntf.add(d1, d2));
+        } catch (Exception e) {
+            System.out.println("Exception: " + e);
+        }
+    }
 }
