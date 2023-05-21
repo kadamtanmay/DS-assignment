@@ -1,0 +1,1 @@
+sudo apt-get install build-essential linux-generic libmpich-dev libopenmpi-dev
