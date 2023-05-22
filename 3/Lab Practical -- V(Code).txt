@@ -1,0 +1,42 @@
+//Create mpi_sum.cpp file
+
+#include <iostream>
+#include <mpi.h>
+
+int main(int argc, char** argv) {
+    int size, rank;
+    int array[] = {1, 2, 3, 4, 5};  // Sample array
+    int localSum = 0;
+    int totalSum = 0;
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    // Calculate the number of elements each process will receive
+    int elementsPerProcess = sizeof(array) / sizeof(array[0]) / size;
+    int remainingElements = sizeof(array) / sizeof(array[0]) % size;
+    int localElements = (rank < remainingElements) ? elementsPerProcess + 1 : elementsPerProcess;
+
+    // Calculate the starting index for the local portion
+    int startIndex = rank * elementsPerProcess + ((rank < remainingElements) ? rank : remainingElements);
+
+    // Calculate the partial sum for the local portion
+    for (int i = startIndex; i < startIndex + localElements; i++) {
+        localSum += array[i];
+    }
+
+    // Perform the reduction operation to get the total sum
+    MPI_Reduce(&localSum, &totalSum, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    // Master process prints the result
+    if (rank == 0) {
+        std::cout << "Total sum: " << totalSum << std::endl;
+    }
+
+    MPI_Finalize();
+    return 0;
+}
+
+//mpicxx mpi_sum.cpp -o mpi_sum
+//mpiexec -n 4 ./mpi_sum
