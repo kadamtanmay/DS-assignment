@@ -1,0 +1,11 @@
+1st Terminal: 
+   javac *.java
+   rmic AddServerImpl 
+   rmiregistry
+   
+2nd Terminal:
+   java AddServer
+   
+   
+3rd terminal:
+   java AddClient 127.0.0.1 8 9
