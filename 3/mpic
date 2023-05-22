@@ -1,4 +1,0 @@
-sudo apt-get install build-essential linux-generic libmpich-dev libopenmpi-dev
-mpicc mpi_sum.c -o mpi_sum
-mpiexec -n 4 ./mpi_sum
-
